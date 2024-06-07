@@ -7,7 +7,7 @@ const allBlogs = async (req, res) => {
   try {
     const user = req.user;
     const posts = await postModel.find({}).populate("user");
-    // console.log(posts);
+
     res.render("index", { user, posts });
   } catch (error) {
     console.log(error);
@@ -52,15 +52,6 @@ const loginAuth = async (req, res) => {
     res.redirect("/");
   } catch (err) {
     console.log(err);
-  }
-};
-
-const logout = async (req, res) => {
-  try {
-    res.clearCookie("token");
-    res.redirect("/login");
-  } catch (error) {
-    console.log(error);
   }
 };
 
@@ -124,7 +115,6 @@ module.exports = {
   addUserPage,
   login,
   loginAuth,
-  logout,
   myblogs,
   edituser,
   editUserPage,

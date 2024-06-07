@@ -4,12 +4,9 @@ const userModel = require("../models/user.model");
 const localStrategy = require("passport-local").Strategy;
 
 const localAuth = (passport) => {
-  console.log("localAuth"); //testing
   passport.use(
     new localStrategy(async (username, password, done) => {
-      const user = await userModel.findOne({ email: username });
-
-      console.log(user); //testing
+      const user = await userModel.findOne({ username });
       if (!user) {
         return done(null, false);
       }

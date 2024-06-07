@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const postRouter = Router();
 
-const { isLogin } = require("../middlewares/userAuth.middleware");
 const { imageUpload } = require("../middlewares/fileUpload.middleware");
 const { postInput } = require("../middlewares/postInput.middleware");
 const {
@@ -13,16 +12,17 @@ const {
   addPost,
   addPostpage,
 } = require("../controllers/post.controller");
+const { isAuth } = require("../middlewares/isAuth");
 
-postRouter.get("/addPost", isLogin, myPost);
-postRouter.get("/addpostpage", isLogin, addPost);
+postRouter.get("/addPost", isAuth, myPost);
+postRouter.get("/addpostpage", isAuth, addPost);
 
-postRouter.post("/addpostpage", isLogin, imageUpload, postInput, addPostpage);
+postRouter.post("/addpostpage", isAuth, imageUpload, postInput, addPostpage);
 
-postRouter.get("/likePost/:id", isLogin, likePost);
-postRouter.get("/editPost/:id", isLogin, editPost);
-postRouter.get("/deletePost/:id", isLogin, deletePost);
+postRouter.get("/likePost/:id", isAuth, likePost);
+postRouter.get("/editPost/:id", isAuth, editPost);
+postRouter.get("/deletePost/:id", isAuth, deletePost);
 
-postRouter.post("/editPost/:id", isLogin, imageUpload, postInput, editPostPage);
+postRouter.post("/editPost/:id", isAuth, imageUpload, postInput, editPostPage);
 
 module.exports = { postRouter };

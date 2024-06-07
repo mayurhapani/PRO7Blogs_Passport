@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 
-const { isLogin } = require("../middlewares/userAuth.middleware");
 const { userInput } = require("../middlewares/userInput.middleware");
 
 const { imageUpload } = require("../middlewares/fileUpload.middleware");
@@ -12,8 +11,6 @@ const {
   addUser,
   addUserPage,
   login,
-  loginAuth,
-  logout,
   edituser,
   editUserPage,
   allBlogs,
@@ -23,13 +20,13 @@ const {
 
 router.get("/addUser", addUser);
 router.get("/login", login);
-router.get("/edituser", isLogin, edituser);
+router.get("/edituser", isAuth, edituser);
 router.get("/", isAuth, allBlogs);
-router.get("/myblogs", isLogin, myblogs);
-router.get("/deleteUser", isLogin, deleteuser);
+router.get("/myblogs", isAuth, myblogs);
+router.get("/deleteUser", isAuth, deleteuser);
 
 router.post("/addUser", imageUpload, userInput, addUserPage);
-router.post("/editeduser", isLogin, imageUpload, userInput, editUserPage);
+router.post("/editeduser", isAuth, imageUpload, userInput, editUserPage);
 
 // router.post("/login", loginAuth);
 // router.get("/logout", logout);
@@ -42,7 +39,6 @@ router.post(
   })
 );
 router.get("/logout", (req, res, next) => {
-  console.log("logout");
   req.logout((err) => {
     if (err) {
       return next(err);
