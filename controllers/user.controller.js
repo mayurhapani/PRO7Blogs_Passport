@@ -117,7 +117,6 @@ const changePassword = async (req, res) => {
   try {
     const { oldpassword, newpassword, confirmpassword } = req.body;
     const user = req.user;
-    console.log(user.password, oldpassword, newpassword);
 
     if (oldpassword == user.password) {
       if (newpassword === confirmpassword) {
