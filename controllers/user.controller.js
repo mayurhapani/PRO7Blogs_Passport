@@ -109,6 +109,24 @@ const deleteuser = async (req, res) => {
   }
 };
 
+const changePasswordPage = (req, res) => {
+  return res.render("changePassword");
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const { oldpassword, newpassword, confirmpassword } = req.body;
+    const user = req.user;
+
+    if (oldpassword === user.password) {
+    } else {
+      console.log("Current Password Is Incorrect");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   allBlogs,
   addUser,
@@ -119,4 +137,6 @@ module.exports = {
   edituser,
   editUserPage,
   deleteuser,
+  changePassword,
+  changePasswordPage,
 };

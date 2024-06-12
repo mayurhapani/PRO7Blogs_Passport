@@ -16,6 +16,8 @@ const {
   allBlogs,
   myblogs,
   deleteuser,
+  changePassword,
+  changePasswordPage,
 } = require("../controllers/user.controller");
 
 router.get("/addUser", addUser);
@@ -26,7 +28,10 @@ router.get("/myblogs", isAuth, myblogs);
 router.get("/deleteUser", isAuth, deleteuser);
 
 router.post("/addUser", imageUpload, userInput, addUserPage);
-router.post("/editeduser", isAuth, imageUpload, userInput, editUserPage);
+router.post("/editeduser", isAuth, imageUpload, editUserPage);
+
+router.get("/changePassword", isAuth, changePasswordPage);
+router.post("/changePassword", isAuth, changePassword);
 
 // router.post("/login", loginAuth);
 // router.get("/logout", logout);
@@ -38,6 +43,7 @@ router.post(
     failureRedirect: "/login",
   })
 );
+
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
