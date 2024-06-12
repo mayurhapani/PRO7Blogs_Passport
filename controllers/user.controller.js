@@ -117,10 +117,20 @@ const changePassword = async (req, res) => {
   try {
     const { oldpassword, newpassword, confirmpassword } = req.body;
     const user = req.user;
+    console.log(user.password, oldpassword, newpassword);
 
-    if (oldpassword === user.password) {
+    if (oldpassword == user.password) {
+      if (newpassword === confirmpassword) {
+        await userModel.findOneAndUpdate({ _id: user._id }, { password: newpassword });
+        console.log("Password Changed Successfully");
+        res.redirect("/myblogs");
+      } else {
+        console.log("New Password And Confirm Password Does Not Match");
+        return res.redirect("/changePassword");
+      }
     } else {
       console.log("Current Password Is Incorrect");
+      return res.redirect("/changePassword");
     }
   } catch (error) {
     console.log(error);
