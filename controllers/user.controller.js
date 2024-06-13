@@ -89,6 +89,26 @@ const myblogs = async (req, res) => {
   }
 };
 
+// const deleteuser = async (req, res) => {
+//   try {
+//     const id = req.user.id;
+
+//     let subImagePath = req.user.image.replace(/\\/g, "/");
+//     if (subImagePath.startsWith("public/")) {
+//       subImagePath = subImagePath.substring("public/".length);
+//     }
+//     const imagePath = path.join(__dirname, "..", "public", subImagePath);
+
+//     fs.unlinkSync(imagePath);
+
+//     await postModel.deleteMany({ user: id });
+//     await userModel.findOneAndDelete({ _id: id });
+//     res.redirect("/login");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
 const deleteuser = async (req, res) => {
   try {
     const id = req.user.id;
@@ -99,13 +119,24 @@ const deleteuser = async (req, res) => {
     }
     const imagePath = path.join(__dirname, "..", "public", subImagePath);
 
-    fs.unlinkSync(imagePath);
+    console.log(`Deleting user with ID: ${id}`);
+    console.log(`Image path: ${imagePath}`);
+
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+      console.log(`Deleted image at path: ${imagePath}`);
+    } else {
+      console.log("Image file does not exist.");
+    }
 
     await postModel.deleteMany({ user: id });
     await userModel.findOneAndDelete({ _id: id });
-    res.redirect("/login");
+    console.log("User and associated posts deleted successfully");
+
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    console.log(error);
+    console.error("Error in deleteuser:", error);
+    res.status(500).json({ message: "An error occurred while deleting the account" });
   }
 };
 

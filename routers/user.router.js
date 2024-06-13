@@ -25,7 +25,7 @@ router.get("/login", login);
 router.get("/edituser", isAuth, edituser);
 router.get("/", isAuth, allBlogs);
 router.get("/myblogs", isAuth, myblogs);
-router.get("/deleteUser", isAuth, deleteuser);
+router.delete("/deleteUser", isAuth, deleteuser);
 
 router.post("/addUser", imageUpload, userInput, addUserPage);
 router.post("/editeduser", isAuth, imageUpload, editUserPage);
