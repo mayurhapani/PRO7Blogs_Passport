@@ -62,7 +62,7 @@ const edituser = async (req, res) => {
 
 const editUserPage = async (req, res) => {
   try {
-    const { name, username, email, password } = req.body;
+    const { name, username, email } = req.body;
     const id = req.user._id;
     let image = req.user.image;
 
@@ -70,7 +70,7 @@ const editUserPage = async (req, res) => {
       fs.unlinkSync(req.user.image);
       image = req.file.path;
     }
-    await userModel.findOneAndUpdate({ _id: id }, { name, username, email, password, image });
+    await userModel.findOneAndUpdate({ _id: id }, { name, username, email, image });
 
     res.redirect("/myblogs");
   } catch (err) {
