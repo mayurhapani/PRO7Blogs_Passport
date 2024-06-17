@@ -28,7 +28,7 @@ router.get("/myblogs", isAuth, myblogs);
 router.delete("/deleteUser", isAuth, deleteuser);
 
 router.post("/addUser", imageUpload, userInput, addUserPage);
-router.post("/editeduser", isAuth, imageUpload, editUserPage);
+router.patch("/editeduser", isAuth, imageUpload, editUserPage);
 
 router.get("/changePassword", isAuth, changePasswordPage);
 router.post("/changePassword", isAuth, changePassword);

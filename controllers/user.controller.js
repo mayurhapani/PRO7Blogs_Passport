@@ -71,8 +71,7 @@ const editUserPage = async (req, res) => {
       image = req.file.path;
     }
     await userModel.findOneAndUpdate({ _id: id }, { name, username, email, image });
-
-    res.redirect("/myblogs");
+    res.status(200).json({ message: "User updated successfully" });
   } catch (err) {
     console.log(err);
   }
@@ -88,26 +87,6 @@ const myblogs = async (req, res) => {
     console.log(error);
   }
 };
-
-// const deleteuser = async (req, res) => {
-//   try {
-//     const id = req.user.id;
-
-//     let subImagePath = req.user.image.replace(/\\/g, "/");
-//     if (subImagePath.startsWith("public/")) {
-//       subImagePath = subImagePath.substring("public/".length);
-//     }
-//     const imagePath = path.join(__dirname, "..", "public", subImagePath);
-
-//     fs.unlinkSync(imagePath);
-
-//     await postModel.deleteMany({ user: id });
-//     await userModel.findOneAndDelete({ _id: id });
-//     res.redirect("/login");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const deleteuser = async (req, res) => {
   try {
