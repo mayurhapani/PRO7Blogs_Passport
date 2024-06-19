@@ -18,6 +18,7 @@ const {
   deleteuser,
   changePassword,
   changePasswordPage,
+  forgetPass,
 } = require("../controllers/user.controller");
 
 router.get("/addUser", addUser);
@@ -33,7 +34,7 @@ router.patch("/editeduser", isAuth, imageUpload, editUserPage);
 router.get("/changePassword", isAuth, changePasswordPage);
 router.post("/changePassword", isAuth, changePassword);
 
-// router.post("/login", loginAuth);
+router.post("/forget", forgetPass);
 // router.get("/logout", logout);
 
 router.post(

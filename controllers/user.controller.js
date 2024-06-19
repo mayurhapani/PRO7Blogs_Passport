@@ -148,7 +148,9 @@ const changePassword = async (req, res) => {
 };
 
 const forgetPass = (req, res) => {
-  const transporter = mailer.createTransporter({
+  const otp = Math.floor(Math.random() * 900000);
+
+  const transporter = mailer.createTransport({
     service: "gmail",
     auth: {
       user: "hapanimayur@gmail.com",
@@ -158,9 +160,9 @@ const forgetPass = (req, res) => {
 
   const sendMail = {
     from: "hapanimayur@gmail.com",
-    to: request.body.userEmail,
+    to: req.body.userEmail,
     subject: "Reset Password",
-    html: opt,
+    html: otp,
   };
 
   transporter.sendMail(sendMail, (err, info) => {
@@ -182,4 +184,5 @@ module.exports = {
   deleteuser,
   changePassword,
   changePasswordPage,
+  forgetPass,
 };
