@@ -4,6 +4,9 @@ const fs = require("fs");
 const path = require("path");
 const mailer = require("nodemailer");
 
+let otp = "";
+let vUserEmail = "";
+
 const allBlogs = async (req, res) => {
   try {
     const user = req.user;
@@ -147,29 +150,87 @@ const changePassword = async (req, res) => {
   }
 };
 
-const forgetPass = (req, res) => {
-  const otp = Math.floor(Math.random() * 900000);
+const forgetPassPage = (req, res) => {
+  res.render("forgetPassword");
+};
 
-  const transporter = mailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "hapanimayur@gmail.com",
-      pass: "ofwo yiky rskz wxkt",
-    },
-  });
+const forgetPass = async (req, res) => {
+  try {
+    const userEmail = req.body.userEmail;
+    const user = await userModel.findOne({ email: userEmail });
 
-  const sendMail = {
-    from: "hapanimayur@gmail.com",
-    to: req.body.userEmail,
-    subject: "Reset Password",
-    html: otp,
-  };
+    if (user) {
+      vUserEmail = userEmail;
+      otp = Math.floor(Math.random() * 900000);
 
-  transporter.sendMail(sendMail, (err, info) => {
-    if (err) console.log(err);
-    else console.log(info);
-  });
-  res.send("sending.........");
+      const transporter = mailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "hapanimayur@gmail.com",
+          pass: "ofwo yiky rskz wxkt",
+        },
+      });
+
+      const sendMail = {
+        from: "hapanimayur@gmail.com",
+        to: req.body.userEmail,
+        subject: "Reset Password",
+        text: otp.toString(),
+      };
+
+      transporter.sendMail(sendMail, (err, info) => {
+        if (err) console.log(err);
+        else {
+          console.log(info);
+        }
+      });
+
+      res.redirect("/otpVerification");
+    } else {
+      console.log("user not exist");
+      res.redirect("/");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const otpPage = async (req, res) => {
+  res.render("otpPage");
+};
+
+const otpVerification = async (req, res) => {
+  try {
+    if (otp != "") {
+      const userOTP = req.body.otp;
+      if (otp == userOTP) {
+        res.render("newPassword");
+      } else {
+        res.send("Wrong OTP");
+      }
+    }
+  } catch (error) {}
+};
+
+const otpPassword = async (req, res) => {
+  try {
+    const { newpassword, confirmpassword } = req.body;
+
+    if (vUserEmail != "") {
+      const user = await userModel.findOne({ email: vUserEmail });
+
+      if (newpassword === confirmpassword) {
+        await userModel.findOneAndUpdate({ _id: user._id }, { password: newpassword });
+        console.log("Password Changed Successfully");
+        res.redirect("/");
+      } else {
+        console.log("New Password And Confirm Password Does Not Match");
+        return res.redirect("/otpPassword");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
@@ -185,4 +246,8 @@ module.exports = {
   changePassword,
   changePasswordPage,
   forgetPass,
+  forgetPassPage,
+  otpPage,
+  otpVerification,
+  otpPassword,
 };

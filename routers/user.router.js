@@ -19,6 +19,10 @@ const {
   changePassword,
   changePasswordPage,
   forgetPass,
+  forgetPassPage,
+  otpPage,
+  otpVerification,
+  otpPassword,
 } = require("../controllers/user.controller");
 
 router.get("/addUser", addUser);
@@ -34,8 +38,13 @@ router.patch("/editeduser", isAuth, imageUpload, editUserPage);
 router.get("/changePassword", isAuth, changePasswordPage);
 router.post("/changePassword", isAuth, changePassword);
 
+router.get("/forget", forgetPassPage);
 router.post("/forget", forgetPass);
-// router.get("/logout", logout);
+
+router.get("/otpVerification", otpPage);
+router.post("/otpVerification", otpVerification);
+
+router.post("/otpPassword", otpPassword);
 
 router.post(
   "/login",
