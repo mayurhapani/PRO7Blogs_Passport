@@ -2,6 +2,7 @@ const postModel = require("../models/post.model");
 const userModel = require("../models/user.model");
 const fs = require("fs");
 const path = require("path");
+const mailer = require("nodemailer");
 
 const allBlogs = async (req, res) => {
   try {
@@ -144,6 +145,29 @@ const changePassword = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const forgetPass = (req, res) => {
+  const transporter = mailer.createTransporter({
+    service: "gmail",
+    auth: {
+      user: "hapanimayur@gmail.com",
+      pass: "ofwo yiky rskz wxkt",
+    },
+  });
+
+  const sendMail = {
+    from: "hapanimayur@gmail.com",
+    to: request.body.userEmail,
+    subject: "Reset Password",
+    html: opt,
+  };
+
+  transporter.sendMail(sendMail, (err, info) => {
+    if (err) console.log(err);
+    else console.log(info);
+  });
+  res.send("sending.........");
 };
 
 module.exports = {
