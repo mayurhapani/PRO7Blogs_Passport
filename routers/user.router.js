@@ -5,6 +5,7 @@ const { userInput } = require("../middlewares/userInput.middleware");
 
 const { imageUpload } = require("../middlewares/fileUpload.middleware");
 const { isAuth } = require("../middlewares/isAuth");
+const { verifyOtpEmail } = require("../middlewares/verifyOptEmail");
 const passport = require("passport");
 
 const {
@@ -40,11 +41,9 @@ router.post("/changePassword", isAuth, changePassword);
 
 router.get("/forget", forgetPassPage);
 router.post("/forget", forgetPass);
-
-router.get("/otpVerification", otpPage);
-router.post("/otpVerification", otpVerification);
-
-router.post("/otpPassword", otpPassword);
+router.get("/otpVerification", verifyOtpEmail, otpPage);
+router.post("/otpVerification", verifyOtpEmail, otpVerification);
+router.post("/otpPassword", verifyOtpEmail, otpPassword);
 
 router.post(
   "/login",

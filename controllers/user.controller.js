@@ -5,7 +5,7 @@ const path = require("path");
 const mailer = require("nodemailer");
 
 let otp = "";
-let vUserEmail = "";
+// let vUserEmail = "";
 
 const allBlogs = async (req, res) => {
   try {
@@ -86,7 +86,7 @@ const myblogs = async (req, res) => {
     const user = req.user;
     const myPosts = await postModel.find({ user: user._id });
 
-    res.render("myblogs", { user, myPosts });
+    res.render("myblogs", { user, myPosts, messages: req.flash("flashMsg") });
   } catch (error) {
     console.log(error);
   }
@@ -160,7 +160,9 @@ const forgetPass = async (req, res) => {
     const user = await userModel.findOne({ email: userEmail });
 
     if (user) {
-      vUserEmail = userEmail;
+      req.vUserEmail = userEmail;
+      console.log(req.vUserEmail);
+      // vUserEmail = userEmail;
       otp = Math.floor(Math.random() * 900000);
 
       const transporter = mailer.createTransport({
@@ -216,8 +218,8 @@ const otpPassword = async (req, res) => {
   try {
     const { newpassword, confirmpassword } = req.body;
 
-    if (vUserEmail != "") {
-      const user = await userModel.findOne({ email: vUserEmail });
+    if (req.vUserEmail != "") {
+      const user = await userModel.findOne({ email: req.vUserEmail });
 
       if (newpassword === confirmpassword) {
         await userModel.findOneAndUpdate({ _id: user._id }, { password: newpassword });

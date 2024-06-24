@@ -26,6 +26,7 @@ const addPostpage = async (req, res) => {
 
     const post = postModel.create({ title, content, image, user: req.user._id });
 
+    req.flash("flashMsg", "postAdded");
     res.redirect("/myblogs");
   } catch (error) {
     console.log(error);
@@ -100,6 +101,7 @@ const deletePost = async (req, res) => {
     }
 
     await postModel.findByIdAndDelete(postId);
+    req.flash("flashMsg", "deletePost");
     res.redirect("/myblogs");
   } catch (err) {
     console.error(err);

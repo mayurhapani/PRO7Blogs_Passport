@@ -9,6 +9,18 @@
       <%- include('./partials/aside') %>
 
       <div class="basis-9/12 bg-zinc-900 min-h-screen w-full p-10">
+        <!-- Display flash messages -->
+        <% if (messages.length > 0) { %> <% messages.forEach(message => { %> <% if (message
+        ==='postAdded') { %>
+        <p class="text-green-600 text-xl font-semibold py-5 ps-5 bg-green-200 mb-5 rounded-lg">
+          New Blog Added Successfully
+        </p>
+        <% } %> <% if (message ==='deletePost') { %>
+        <p class="text-red-600 text-xl font-semibold py-5 ps-5 bg-red-200 mb-5 rounded-lg">
+          Blog Deleted Successfully
+        </p>
+        <% } %> <% }) %> <% } %>
+
         <div class="flex justify-start items-center mb-10">
           <img class="inline-block h-20 w-20 rounded-full" src="/<%= user.image %> " alt="image" />
           <h2 class="text-white text-4xl font-bold ms-10">Hello, <%= user.name %> !</h2>
