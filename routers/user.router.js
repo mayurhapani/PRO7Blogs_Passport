@@ -63,6 +63,7 @@ router.get("/logout", (req, res, next) => {
         return next(err);
       }
       res.clearCookie("connect.sid");
+      // req.flash("flashMsg", "userLogout");
       res.redirect("/login");
     });
   });

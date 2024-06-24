@@ -76,6 +76,7 @@ const editPostPage = async (req, res) => {
     }
 
     await postModel.findOneAndUpdate({ _id: req.params.id }, { title, content, image });
+    req.flash("flashMsg", "postEdited");
     res.redirect("/myblogs");
   } catch (error) {
     console.log(error);

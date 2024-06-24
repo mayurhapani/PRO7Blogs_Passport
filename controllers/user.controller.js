@@ -39,7 +39,7 @@ const addUserPage = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.render("login");
+  res.render("login", { messages: req.flash("flashMsg") });
 };
 
 const loginAuth = async (req, res) => {
@@ -75,6 +75,7 @@ const editUserPage = async (req, res) => {
       image = req.file.path;
     }
     await userModel.findOneAndUpdate({ _id: id }, { name, username, email, image });
+    req.flash("flashMsg", "userEdited");
     res.status(200).json({ message: "User updated successfully" });
   } catch (err) {
     console.log(err);
@@ -115,7 +116,7 @@ const deleteuser = async (req, res) => {
     await postModel.deleteMany({ user: id });
     await userModel.findOneAndDelete({ _id: id });
     console.log("User and associated posts deleted successfully");
-
+    req.flash("flashMsg", "deleteUser");
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     console.error("Error in deleteuser:", error);
@@ -136,6 +137,7 @@ const changePassword = async (req, res) => {
       if (newpassword === confirmpassword) {
         await userModel.findOneAndUpdate({ _id: user._id }, { password: newpassword });
         console.log("Password Changed Successfully");
+        req.flash("flashMsg", "changePassword");
         res.redirect("/myblogs");
       } else {
         console.log("New Password And Confirm Password Does Not Match");
