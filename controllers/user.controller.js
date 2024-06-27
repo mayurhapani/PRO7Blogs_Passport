@@ -162,10 +162,10 @@ const forgetPass = async (req, res) => {
     const user = await userModel.findOne({ email: userEmail });
 
     if (user) {
-      req.vUserEmail = userEmail;
-      console.log(req.vUserEmail);
-      // vUserEmail = userEmail;
+      res.cookie("userEmail", userEmail);
+
       otp = Math.floor(Math.random() * 900000);
+      // console.log("otp ", otp);
 
       const transporter = mailer.createTransport({
         service: "gmail",
@@ -210,7 +210,9 @@ const otpVerification = async (req, res) => {
       if (otp == userOTP) {
         res.render("newPassword");
       } else {
-        res.send("Wrong OTP");
+        res.clearCookie("userEmail");
+        req.flash("flashMsg", "wrongOtp");
+        res.redirect("/");
       }
     }
   } catch (error) {}
@@ -219,16 +221,23 @@ const otpVerification = async (req, res) => {
 const otpPassword = async (req, res) => {
   try {
     const { newpassword, confirmpassword } = req.body;
+    const userEmail = req.cookies.userEmail;
 
-    if (req.vUserEmail != "") {
-      const user = await userModel.findOne({ email: req.vUserEmail });
+    if (userEmail != "") {
+      const user = await userModel.findOne({ email: userEmail });
 
       if (newpassword === confirmpassword) {
-        await userModel.findOneAndUpdate({ _id: user._id }, { password: newpassword });
+        console.log(user);
+
+        await userModel.findOneAndUpdate({ _id: user.id }, { password: newpassword });
         console.log("Password Changed Successfully");
+
+        req.flash("flashMsg", "changePassword");
+        res.clearCookie("userEmail");
         res.redirect("/");
       } else {
         console.log("New Password And Confirm Password Does Not Match");
+        res.clearCookie("userEmail");
         return res.redirect("/otpPassword");
       }
     }

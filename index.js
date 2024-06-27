@@ -11,14 +11,14 @@ const passport = require("passport");
 const localAuth = require("./middlewares/passport");
 const session = require("express-session");
 
-// const cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 
 app.set("view engine", "ejs");
 
 app.use("/public", express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cookieParser());
+app.use(cookieParser());
 
 app.use(session({ secret: "1234", resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
